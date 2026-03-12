@@ -1,5 +1,6 @@
 <?php
 
+// --- PARENT CLASS ---
 // this is the root class of my hierarchy (aka the parent class), all of the spell types I define will inherit from this class
 
 class Spell implements SpellInterface
@@ -12,6 +13,7 @@ class Spell implements SpellInterface
     }
 }
 
+// --- INSTANCES ---
 // this part is where I am creating objects (aka instances) of the spell class and setting the mana cost for each spell
 
 $spellOne = new Spell();
@@ -23,6 +25,7 @@ $spellTwo->manaCost = 25;
 $spellTwo->cast();
 
 
+// --- (FIRST) CHILD CLASSES ---
 // this is the first child class that inherits from the spell class, it inherits $manaCost and cast()
 
 class AttackSpell extends Spell
@@ -72,11 +75,117 @@ class HealingSpell extends Spell
 
     public function cast()
     {
+        parent::cast();
+
         echo "<p>The healing spell restores health to the caster.</p>";
+
+        parent::cast();
     }
 }
 
 $healingSpell = new HealingSpell();
 $healingSpell->cast();
 
+// --- (SECOND) CHILD CLASSES ---
+// these are the child classes that inherit from the attack, defense and healing spell class
+
+// this is the first child class that inherits from the attack spell class
+
+class Fireball extends AttackSpell
+{
+    protected $spellName;
+    protected $damage;
+
+    public function __construct(string $spellName, int $damage)
+    {
+        $this->spellName = $spellName;
+        $this->damage = $damage;
+    }
+
+    public function explode()
+    {
+        $this->damage += 50;
+    }
+}
+
+$fireball = new Fireball('Fireball', 120);
+var_dump($fireball);
+
+$fireball2 = new Fireball('Inferno Blast', 200);
+var_dump($fireball2);
+
+
+// this is the second child class that inherits from the attack spell class
+
+class LightningStrike extends AttackSpell
+{
+    protected $spellName;
+    protected $damage;
+
+    public function __construct(string $spellName, int $damage)
+    {
+        $this->spellName = $spellName;
+        $this->damage = $damage;
+    }
+
+    public function strike()
+    {
+        echo "<p>A bolt of lightning strikes the enemy for {$this->damage} damage!</p>";
+    }
+}
+
+$lightning = new LightningStrike("Lightning Strike", 150);
+$lightning->strike();
+
+// this is the child class that inherits from the defense spell class
+
+class IceShield extends DefenseSpell
+{
+    protected $spellName;
+    protected $shieldStrength;
+
+    public function __construct(string $spellName, int $shieldStrength)
+    {
+        $this->spellName = $spellName;
+        $this->shieldStrength = $shieldStrength;
+    }
+
+    public function protect()
+    {
+        echo "<p>An icy barrier forms, absorbing {$this->shieldStrength} damage!</p>";
+    }
+}
+
+$shield = new IceShield("Ice Shield", 200);
+$shield->protect();
+
+// this is the child class that inherits from the healing spell class
+
+class GreaterHeal extends HealingSpell
+{
+    protected $spellName;
+    protected $healingAmount;
+
+    public function __construct(string $spellName, int $healingAmount)
+    {
+        $this->spellName = $spellName;
+        $this->healingAmount = $healingAmount;
+    }
+
+    public function heal()
+    {
+        echo "<p>You restore {$this->healingAmount} health!</p>";
+    }
+}
+
+$heal = new GreaterHeal("Greater Heal", 120);
+$heal->heal();
+
+// --- INTERFACE ---
+// the interface defines required methods
+
+interface SpellInterface
+{
+    public function cast();
+}
 ?>
