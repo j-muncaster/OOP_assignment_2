@@ -59,8 +59,6 @@ class DefenseSpell extends Spell
         parent::cast();
 
         echo "<p>A magical shield surrounds the caster.</p>";
-
-        parent::cast();
     }
 }
 
@@ -78,8 +76,6 @@ class HealingSpell extends Spell
         parent::cast();
 
         echo "<p>The healing spell restores health to the caster.</p>";
-
-        parent::cast();
     }
 }
 
@@ -188,4 +184,46 @@ interface SpellInterface
 {
     public function cast();
 }
+
+// --- TRAIT --
+// a trait allows us to share functionality between classes without using inheritance
+
+trait MagicalEffectTrait
+{
+    public function cast()
+    {
+        echo "<h2>A mysterious magical effect occurs!</h2>";
+    }
+}
+
+
+// --- TRAIT IMPLEMENTATION ---
+// this class implements the SpellInterface but instead of defining its own cast() method, it borrows the functionality from the MagicalEffectTrait
+
+class UtilitySpell implements SpellInterface
+{
+    use MagicalEffectTrait;
+}
+
+$utilitySpell = new UtilitySpell();
+
+
+// -- TYPE HINTED FUNCTION ---
+// this function accepts any object that implements the SpellInterface
+// this demonstrates polymorphism since different spell types can be passed in
+
+function dumpSpell(SpellInterface $spell)
+{
+    var_dump($spell);
+}
+
+// here I am passing different spell objects into the same function
+
+dumpSpell($fireball);
+dumpSpell($utilitySpell);
+
+
+// this calls the cast method that came from the trait
+
+$utilitySpell->cast();
 ?>
