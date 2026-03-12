@@ -22,4 +22,61 @@ $spellTwo = new Spell();
 $spellTwo->manaCost = 25;
 $spellTwo->cast();
 
+
+// this is the first child class that inherits from the spell class, it inherits $manaCost and cast()
+
+class AttackSpell extends Spell
+{
+    public $manaCost = 20;
+
+    public function explode()
+    {
+        echo "<h2>The attack spell explodes with power!</h2>";
+    }
+
+    public function cast()
+    {
+        $this->explode();
+    }
+}
+
+$attackSpell = new AttackSpell();
+$attackSpell->cast();
+
+// this is the second child class like the one above 
+
+class DefenseSpell extends Spell
+{
+    public $manaCost = 15;
+
+    protected $shieldStrength = 100;
+
+    public function cast()
+    {
+        parent::cast();
+
+        echo "<p>A magical shield surrounds the caster.</p>";
+
+        parent::cast();
+    }
+}
+
+$defenseSpell = new DefenseSpell();
+$defenseSpell->cast();
+
+// and this is the third child class, it also inherits from the spell class
+
+class HealingSpell extends Spell
+{
+    public $manaCost = 30;
+
+    public function cast()
+    {
+        echo "<p>The healing spell restores health to the caster.</p>";
+    }
+}
+
+$healingSpell = new HealingSpell();
+$healingSpell->cast();
+
 ?>
